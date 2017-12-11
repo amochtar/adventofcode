@@ -1,32 +1,29 @@
-def distance(x, y, z):
-    return (abs(x) + abs(y) + abs(z)) // 2
+from collections import namedtuple
+
+Hexpoint = namedtuple('Hexpoint', ['x', 'y', 'z'])
+moves = {
+    'n': lambda p: Hexpoint(p.x, p.y+1, p.z-1),
+    's': lambda p: Hexpoint(p.x, p.y-1, p.z+1),
+    'ne': lambda p: Hexpoint(p.x+1, p.y, p.z-1),
+    'sw': lambda p: Hexpoint(p.x-1, p.y, p.z+1),
+    'nw': lambda p: Hexpoint(p.x-1, p.y+1, p.z),
+    'se': lambda p: Hexpoint(p.x+1, p.y-1, p.z),
+}
+
+
+def distance(a, b=Hexpoint(0, 0, 0)):
+    return (abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)) // 2
 
 
 def solve(steps):
-    x, y, z = 0, 0, 0
+    pos = Hexpoint(0, 0, 0)
     maxdist = 0
 
     for step in steps:
-        if step == 'n':
-            y += 1
-            z -= 1
-        elif step == 'ne':
-            x += 1
-            z -= 1
-        elif step == 'nw':
-            x -= 1
-            y += 1
-        elif step == 's':
-            y -= 1
-            z += 1
-        elif step == 'se':
-            x += 1
-            y -= 1
-        elif step == 'sw':
-            x -= 1
-            z += 1
-        maxdist = max(maxdist, distance(x, y, z))
-    dist = distance(x, y, z)
+        pos = moves[step](pos)
+        dist = distance(pos)
+        maxdist = max(maxdist, dist)
+
     print("Part 1:", dist)
     print("Part 2:", maxdist)
 
