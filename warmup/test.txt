@@ -1,0 +1,1 @@
+Up, A, Right, Right, B, Left, B, Start
