@@ -1,6 +1,6 @@
 def solve(input):
     f = 0
-    ff = {f: True}
+    ff = set([f])
 
     frs = list(map(int, input))
     while True:
@@ -10,7 +10,7 @@ def solve(input):
                 print(f)
                 return
 
-            ff[f] = True
+            ff.add(f)
 
 
 with open('input.txt', 'r') as f:

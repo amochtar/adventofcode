@@ -1,9 +1,5 @@
 def solve(input):
-    f = 0
-    frs = list(map(int, input))
-    for fr in frs:
-        f += fr
-    print(f)
+    print(sum(list(map(int, input))))
 
 
 with open('input.txt', 'r') as f:
