@@ -1,9 +1,8 @@
+from heapq import heappop, heappush
 from collections import deque
 from collections import namedtuple
 
 Point = namedtuple('Point', ['x', 'y'])
-State = namedtuple('State', ['steps', 'loc'])
-
 
 moves = {
     'n': lambda p: Point(p.x, p.y-1),
@@ -27,6 +26,10 @@ exits = {
     "═": ["w", "e"],
     "╣": ["n", "s", "w"],
 }
+
+
+def distance(a, b):
+    return abs(a.x - b.x) + abs(a.y - b.y)
 
 
 def valid_loc(input, loc):
@@ -54,27 +57,29 @@ def solve(input):
     width = len(input[0])
     height = len(input)
 
-    visited = set([])
-    q = deque([State(steps=0, loc=Point(0, 0))])
+    loc = Point(0,0)
+    dest = Point(width-1, height-1)
+
+    visited = {}
+    q = [(0 + distance(loc, dest), 0, loc)]
     while q:
-        s = q.popleft()
-        if s.loc.x == width-1 and s.loc.y == height-1:
-            print(s.steps)
+        _, steps, loc = heappop(q)
+        if loc.x == dest.x and loc.y == dest.y:
+            print(steps, len(visited))
             return
 
-        if s in visited:
+        if loc in visited:
             continue
 
-        visited.add(s.loc)
+        visited[loc] = steps
 
-        tile = input[s.loc.y][s.loc.x]
-        next_locs = []
+        tile = input[loc.y][loc.x]
         nm = exits[tile]
-        # print(s, tile, nm)
         for m in nm:
-            next_loc = moves[m](s.loc)
-            if next_loc not in visited and valid_move(input, s.loc, m):
-                q.append(State(steps=s.steps+1, loc=next_loc))
+            next_loc = moves[m](loc)
+            if next_loc not in visited and valid_move(input, loc, m):
+                cost = steps+1+distance(next_loc, dest)
+                heappush(q, (cost, steps+1, next_loc))
 
 
 with open('input.txt', 'r') as f:
