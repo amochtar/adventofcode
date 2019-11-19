@@ -40,12 +40,13 @@ def change(land):
 def solve(input):
     land = np.array([list(line) for line in input])
     land = np.pad(land, ((1,1),(1,1)), 'constant', constant_values=('*'))
-    # print_land(land)
+    print_land(land)
     seen = []
     i = 0
     prev_i = 0
     while True:
         land = change(land)
+        print_land(land)
         s = '\n'.join(''.join(a) for a in land)
         if s in seen:
             prev_i = seen.index(s)
