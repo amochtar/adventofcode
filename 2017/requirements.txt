@@ -1,0 +1,4 @@
+ipython==6.2.1
+networkx==2.0
+numpy==1.13.3
+regex==2017.11.9
