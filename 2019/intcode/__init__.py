@@ -1,7 +1,15 @@
 from collections import defaultdict
+import itertools
 
 
-def runner(opcodes, inputs):
+def runner(opcodes, inp):
+    if isinstance(inp, list):
+        inputs = (x for x in inputs)
+    elif isinstance(inp, int):
+        inputs = itertools.repeat(inp)
+    else:
+        inputs = inp
+
     opcodes = defaultdict(
         int, {i: int(v) for i, v in enumerate(opcodes)})
 
