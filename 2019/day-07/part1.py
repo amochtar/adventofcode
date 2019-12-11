@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 
-from itertools import permutations, chain, repeat
+from itertools import permutations
 import intcode
+
+
+def inputs(phase, inp):
+    yield phase
+    while True:
+        yield inp
 
 
 def solve(opcodes):
@@ -10,8 +16,7 @@ def solve(opcodes):
     for phases in phases_perms:
         ret = 0
         for p in phases:
-            inputs = chain(repeat(p, 1), repeat(ret))
-            ret = max(ret, next(intcode.runner(opcodes, inputs)))
+            ret = max(ret, next(intcode.runner(opcodes, inputs(p, ret))))
 
         if ret > max_ret:
             # print(phases, ret)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from itertools import permutations, chain, repeat
+from itertools import permutations
 import intcode
 
 

@@ -1,43 +1,10 @@
 #!/usr/bin/env python
 
-from collections import defaultdict
-
-
-def get_parameter(opcodes, i, immediate_mode):
-    if immediate_mode:
-        return opcodes[i]
-    return opcodes[opcodes[i]]
+import intcode
 
 
 def solve(opcodes):
-    i = 0
-    out = []
-    while True:
-        opcode = opcodes[i] % 100
-        modes = [p == '1'
-                 for p in reversed(str(opcodes[i] // 100).rjust(4, '0'))]
-
-        if opcode == 1:
-            a = get_parameter(opcodes, i+1, modes[0])
-            b = get_parameter(opcodes, i+2, modes[1])
-            opcodes[opcodes[i+3]] = a + b
-            i += 4
-        elif opcode == 2:
-            a = get_parameter(opcodes, i+1, modes[0])
-            b = get_parameter(opcodes, i+2, modes[1])
-            opcodes[opcodes[i+3]] = a * b
-            i += 4
-        elif opcode == 3:
-            opcodes[opcodes[i+1]] = 1
-            i += 2
-        elif opcode == 4:
-            a = get_parameter(opcodes, i+1, modes[0])
-            out.append(a)
-            i += 2
-        elif opcode == 99:
-            break
-
-    print(out)
+    print(list(intcode.runner(opcodes, 1))[-1])
 
 
 # with open('test.txt', 'r') as f:

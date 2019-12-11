@@ -1,13 +1,15 @@
 from collections import defaultdict
 import itertools
+import types
 
 
-def runner(opcodes, inp):
+def runner(opcodes, inp=0):
     if isinstance(inp, list):
-        inputs = (x for x in inputs)
+        inputs = (x for x in inp)
     elif isinstance(inp, int):
         inputs = itertools.repeat(inp)
     else:
+        assert isinstance(inp, types.GeneratorType)
         inputs = inp
 
     opcodes = defaultdict(
@@ -28,6 +30,7 @@ def runner(opcodes, inp):
 
     i = 0
     base = 0
+    jumps = {1: 4, 2: 4, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4, 9: 2}
     while True:
         opcode = opcodes[i] % 100
         modes = [int(p)
@@ -36,55 +39,34 @@ def runner(opcodes, inp):
         b = get_parameter(i+2, modes[1])
 
         if opcode == 1:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             write_parameter(i+3, modes[2], a+b)
-            i += 4
         elif opcode == 2:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             write_parameter(i+3, modes[2], a*b)
-            i += 4
         elif opcode == 3:
             write_parameter(i+1, modes[0], next(inputs))
-            i += 2
         elif opcode == 4:
-            a = get_parameter(i+1, modes[0])
             yield a
-            i += 2
         elif opcode == 5:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             if a != 0:
                 i = b
-            else:
-                i += 3
+                continue
         elif opcode == 6:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             if a == 0:
                 i = b
-            else:
-                i += 3
+                continue
         elif opcode == 7:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             if a < b:
                 write_parameter(i+3, modes[2], 1)
             else:
                 write_parameter(i+3, modes[2], 0)
-            i += 4
         elif opcode == 8:
-            a = get_parameter(i+1, modes[0])
-            b = get_parameter(i+2, modes[1])
             if a == b:
                 write_parameter(i+3, modes[2], 1)
             else:
                 write_parameter(i+3, modes[2], 0)
-            i += 4
         elif opcode == 9:
-            a = get_parameter(i+1, modes[0])
             base += a
-            i += 2
         elif opcode == 99:
             return
+
+        i += jumps[opcode]

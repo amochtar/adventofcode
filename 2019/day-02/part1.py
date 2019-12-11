@@ -4,10 +4,7 @@ from collections import defaultdict
 
 
 def solve(opcodes):
-    opcodes[1] = 12
-    opcodes[2] = 2
     i = 0
-
     while True:
         if opcodes[i] == 1:
             opcodes[opcodes[i+3]] = opcodes[opcodes[i+1]] + \
@@ -28,4 +25,6 @@ def solve(opcodes):
 
 with open('input.txt', 'r') as f:
     input = list(map(int, f.read().split(',')))
+    input[1] = 12
+    input[2] = 2
     solve(input)
