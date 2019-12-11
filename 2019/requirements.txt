@@ -1,5 +1,6 @@
 ipython==7.9.0
 networkx==2.4
 numpy==1.17.4
+parse==1.12.1
 regex==2019.11.1
 sortedcontainers==2.1.0
