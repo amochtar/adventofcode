@@ -44,12 +44,13 @@ def solve(opcodes, start_color=0):
     pos = (0, 0)
     panels[pos] = start_color
     direction = 'n'
-    inputs = [panels[pos]]
-    robot = intcode.runner(opcodes, (i for i in inputs))
+    robot = intcode.runner(opcodes)
     painting = True
     while True:
         try:
             out = next(robot)
+            if out == 'inp':
+                out = robot.send(panels[pos])
             if painting:
                 panels[pos] = out
             else:
@@ -58,7 +59,6 @@ def solve(opcodes, start_color=0):
                 elif out == 1:
                     direction = right_turn[direction]
                 pos = moves[direction](pos)
-                inputs.append(panels[pos])
             painting = not painting
         except StopIteration:
             break

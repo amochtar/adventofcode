@@ -3,13 +3,12 @@ import itertools
 import types
 
 
-def runner(opcodes, inp=0):
+def runner(opcodes, inp=None):
     if isinstance(inp, list):
         inputs = (x for x in inp)
     elif isinstance(inp, int):
         inputs = itertools.repeat(inp)
-    else:
-        assert isinstance(inp, types.GeneratorType)
+    elif isinstance(inp, types.GeneratorType):
         inputs = inp
 
     opcodes = defaultdict(
@@ -43,7 +42,11 @@ def runner(opcodes, inp=0):
         elif opcode == 2:
             write_parameter(i+3, modes[2], a*b)
         elif opcode == 3:
-            write_parameter(i+1, modes[0], next(inputs))
+            if inp == None:
+                a = yield 'inp'
+            else:
+                a = next(inputs)
+            write_parameter(i+1, modes[0], a)
         elif opcode == 4:
             yield a
         elif opcode == 5:
