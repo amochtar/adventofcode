@@ -3,6 +3,12 @@ import itertools
 import types
 
 
+def parse(inp):
+    if inp.strip() == '':
+        return []
+    return [int(i) for i in inp.strip().split(',')]
+
+
 def runner(opcodes, inp=None):
     if isinstance(inp, list):
         inputs = (x for x in inp)
