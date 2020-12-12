@@ -1,30 +1,31 @@
 import itertools
 import re
 import math
+from typing import List, Tuple
 
 
-def ints(text):
+def ints(text: str) -> Tuple[int, ...]:
     "Return a tuple of all ints in a string"
     return tuple(map(int, re.findall(r'-?\b\d+\b', text)))
 
 
-def lcm(a, b):
+def lcm(a: int, b: int) -> int:
     "Return the least common multiple of a and b"
     return abs(a*b) // math.gcd(a, b)
 
 
-def manhattan(p, q=itertools.repeat(0)):
+def manhattan(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
     "Return the manhattan distance between 2 (multi-dimensional) points"
     return sum([abs(a-b) for a, b in zip(p, q)])
 
 
-def king_distance(p, q=itertools.repeat(0)):
-    "Number of chess King moves between two points."
+def king_distance(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
+    "Return thenNumber of chess King moves between two points"
     return max(abs(a - b) for a, b in zip(p, q))
 
 
-def neighbors4(p):
-    "Return the 4 neighboring cells"
+def neighbors4(p: Tuple[int, int]) -> List[Tuple[int, int]]:
+    "Return the 4 neighboring cells for a given position"
     x, y = p
     return [
         (x, y-1),
@@ -34,8 +35,8 @@ def neighbors4(p):
     ]
 
 
-def neighbors8(p):
-    "Return the 4 neighboring cells"
+def neighbors8(p: Tuple[int, int]) -> List[Tuple[int, int]]:
+    "Return the 8 neighboring cells for a given position"
     x, y = p
     return [
         (x-1, y-1),
@@ -67,3 +68,39 @@ right_turn = {
     'e': 's',
     'w': 'n',
 }
+
+facing_dir = {
+    'n': (0, -1),
+    's': (0, 1),
+    'e': (1, 0),
+    'w': (-1, 0),
+}
+
+origin = (0, 0)
+
+
+def add_pos(a: Tuple[int, int], b: Tuple[int, int], factor: int = 1) -> Tuple[int, int]:
+    "Adds two position tuples"
+    return (a[0]+b[0]*factor, a[1]+b[1]*factor)
+
+
+def sub_pos(a: Tuple[int, int], b: Tuple[int, int]) -> Tuple[int, int]:
+    "Subtracts the position tuple b from a"
+    return (a[0]-b[0], a[1]-b[1])
+
+
+def mult_pos(a: Tuple[int, int], factor: int) -> Tuple[int, int]:
+    "Multiplies a position tuple with a given factor"
+    return (a[0]*factor, a[1]*factor)
+
+
+def rot_left(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int, int]:
+    rel_pos = sub_pos(pos, rel)
+    new_pos = (rel_pos[1], -rel_pos[0])
+    return add_pos(new_pos, rel)
+
+
+def rot_right(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int, int]:
+    rel_pos = sub_pos(pos, rel)
+    new_pos = (-rel_pos[1], rel_pos[0])
+    return add_pos(new_pos, rel)
