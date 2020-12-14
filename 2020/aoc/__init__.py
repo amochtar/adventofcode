@@ -9,9 +9,10 @@ def ints(text: str) -> Tuple[int, ...]:
     return tuple(map(int, re.findall(r'-?\b\d+\b', text)))
 
 
-def lcm(a: int, b: int) -> int:
-    "Return the least common multiple of a and b"
-    return abs(a*b) // math.gcd(a, b)
+def powerset(iterable):
+    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
+    s = list(iterable)
+    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
 
 
 def manhattan(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
