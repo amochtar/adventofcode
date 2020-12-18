@@ -51,6 +51,31 @@ def neighbors8(p: Tuple[int, int]) -> List[Tuple[int, int]]:
     ]
 
 
+def neighbors_cube(p: Tuple[int, int, int]) -> List[Tuple[int, int, int]]:
+    "Return the 26 neighboring cells for a given position in a 3d cube"
+    x, y, z = p
+    n = []
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            for k in range(-1, 2):
+                if (i, j, k) != (0, 0, 0):
+                    n.append((x+i, y+j, z+k))
+    return n
+
+
+def neighbors_cube4(p: Tuple[int, int, int, int]) -> List[Tuple[int, int, int, int]]:
+    "Return the 80 neighboring cells for a given position in a 4-d cube"
+    x, y, z, w = p
+    n = []
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            for k in range(-1, 2):
+                for l in range(-1, 2):
+                    if (i, j, k, l) != (0, 0, 0, 0):
+                        n.append((x+i, y+j, z+k, w+l))
+    return n
+
+
 moves = {
     'n': lambda p: (p[0], p[1]-1),
     's': lambda p: (p[0], p[1]+1),
