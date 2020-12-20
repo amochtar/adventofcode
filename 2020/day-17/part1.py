@@ -10,18 +10,15 @@ def solve(inp: str):
         for y, char in enumerate(line):
             grid[(x, y, 0)] = char == '#'
 
-    for cycle in range(6):
-        min_x = min(x for x, _, _ in grid.keys())-1
-        max_x = max(x for x, _, _ in grid.keys())+2
-        min_y = min(y for _, y, _ in grid.keys())-1
-        max_y = max(y for _, y, _ in grid.keys())+2
-        min_z = min(z for _, _, z in grid.keys())-1
-        max_z = max(z for _, _, z in grid.keys())+2
+    for _ in range(6):
+        (min_x, max_x), \
+            (min_y, max_y), \
+            (min_z, max_z) = aoc.min_max(grid.keys())
 
         new_grid = grid.copy()
-        for x in range(min_x, max_x):
-            for y in range(min_y, max_y):
-                for z in range(min_z, max_z):
+        for x in range(min_x-1, max_x+2):
+            for y in range(min_y-1, max_y+2):
+                for z in range(min_z-1, max_z+2):
                     p = (x, y, z)
                     active = grid[p]
                     active_neighbors = sum(grid[n]

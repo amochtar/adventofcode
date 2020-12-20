@@ -127,16 +127,19 @@ def mult_pos(a: Tuple[int, int], factor: int) -> Tuple[int, int]:
 
 
 def rot_left(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int, int]:
+    "Rotates a position 90 degrees left (counter clock-wise) relative to the given location (default origin)"
     rel_pos = sub_pos(pos, rel)
     new_pos = (rel_pos[1], -rel_pos[0])
     return add_pos(new_pos, rel)
 
 
 def rot_right(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int, int]:
+    "Rotates a position 90 degrees right (clock-wise) relative to the given location (default origin)"
     rel_pos = sub_pos(pos, rel)
     new_pos = (-rel_pos[1], rel_pos[0])
     return add_pos(new_pos, rel)
 
 
 def min_max(lst: List[Tuple[int, ...]]) -> Tuple[int, ...]:
+    "Returns the min and max values for every index in the given list of tuples"
     return tuple((min(e), max(e)) for e in zip(*lst))

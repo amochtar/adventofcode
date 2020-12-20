@@ -11,14 +11,10 @@ def solve(inp: str):
             grid[(x, y, 0, 0)] = char == '#'
 
     for _ in range(6):
-        min_x = min(x for x, _, _, _ in grid.keys())
-        max_x = max(x for x, _, _, _ in grid.keys())
-        min_y = min(y for _, y, _, _ in grid.keys())
-        max_y = max(y for _, y, _, _ in grid.keys())
-        min_z = min(z for _, _, z, _ in grid.keys())
-        max_z = max(z for _, _, z, _ in grid.keys())
-        min_w = min(w for _, _, _, w in grid.keys())
-        max_w = max(w for _, _, _, w in grid.keys())
+        (min_x, max_x), \
+            (min_y, max_y), \
+            (min_z, max_z), \
+            (min_w, max_w) = aoc.min_max(grid.keys())
 
         new_grid = grid.copy()
         for x in range(min_x-1, max_x+2):
