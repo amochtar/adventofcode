@@ -94,6 +94,12 @@ right_turn = {
     'e': 's',
     'w': 'n',
 }
+opposite = {
+    'n': 's',
+    's': 'n',
+    'e': 'w',
+    'w': 'e',
+}
 
 facing_dir = {
     'n': (0, -1),
@@ -130,3 +136,7 @@ def rot_right(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int,
     rel_pos = sub_pos(pos, rel)
     new_pos = (-rel_pos[1], rel_pos[0])
     return add_pos(new_pos, rel)
+
+
+def min_max(lst: List[Tuple[int, ...]]) -> Tuple[int, ...]:
+    return tuple((min(e), max(e)) for e in zip(*lst))
