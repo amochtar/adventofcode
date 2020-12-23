@@ -143,3 +143,8 @@ def rot_right(pos: Tuple[int, int], rel: Tuple[int, int] = origin) -> Tuple[int,
 def min_max(lst: List[Tuple[int, ...]]) -> Tuple[int, ...]:
     "Returns the min and max values for every index in the given list of tuples"
     return tuple((min(e), max(e)) for e in zip(*lst))
+
+
+def mod1(a: int, b: int) -> int:
+    "Returns 1-based modulo"
+    return 1 + (a-1) % b
