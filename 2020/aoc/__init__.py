@@ -110,6 +110,20 @@ facing_dir = {
 
 origin = (0, 0)
 
+hex_origin = (0, 0, 0)
+hex_moves = {
+    'ne': lambda p: (p[0]+1, p[1], p[2]-1),
+    'nw': lambda p: (p[0], p[1]+1, p[2]-1),
+    'se': lambda p: (p[0], p[1]-1, p[2]+1),
+    'sw': lambda p: (p[0]-1, p[1], p[2]+1),
+    'w': lambda p: (p[0]-1, p[1]+1, p[2]),
+    'e': lambda p: (p[0]+1, p[1]-1, p[2]),
+}
+
+
+def hex_neighbors(p: Tuple[int, int, int]) -> List[Tuple[int, int, int]]:
+    return [move(p) for move in hex_moves.values()]
+
 
 def add_pos(a: Tuple[int, int], b: Tuple[int, int], factor: int = 1) -> Tuple[int, int]:
     "Adds two position tuples"
