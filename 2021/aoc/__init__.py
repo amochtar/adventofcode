@@ -12,7 +12,7 @@ def timing(f):
         ts = time()
         result = f(*args, **kw)
         te = time()
-        print('func:%r took: %2.4f sec' %
+        print('func:%r took: %2.6f sec' %
               (f.__name__, te-ts))
         return result
     return wrap
@@ -33,8 +33,8 @@ def sliding_window(iterable, n=2):
     "Returns a sliding window (of width n) over data from the iterable"
     iterables = itertools.tee(iterable, n)
     for i in range(1, n):
-        for j in range(0, i):
-            next(iterables[i], None)
+        for each in iterables[i:]:
+            next(each, None)
     return zip(*iterables)
 
 
