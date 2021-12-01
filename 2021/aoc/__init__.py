@@ -29,6 +29,15 @@ def powerset(iterable):
     return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s)+1))
 
 
+def sliding_window(iterable, n=2):
+    "Returns a sliding window (of width n) over data from the iterable"
+    iterables = itertools.tee(iterable, n)
+    for i in range(1, n):
+        for j in range(0, i):
+            next(iterables[i], None)
+    return zip(*iterables)
+
+
 def manhattan(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
     "Return the manhattan distance between 2 (multi-dimensional) points"
     return sum([abs(a-b) for a, b in zip(p, q)])
