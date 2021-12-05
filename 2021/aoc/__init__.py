@@ -185,3 +185,8 @@ def min_max(lst: List[Tuple[int, ...]]) -> Tuple[int, ...]:
 def mod1(a: int, b: int) -> int:
     "Returns 1-based modulo"
     return 1 + (a-1) % b
+
+
+def sign(x: int) -> int:
+    "Returns the sign of a number"
+    return -1 if x < 0 else (1 if x > 0 else 0)
