@@ -1,8 +1,10 @@
 from functools import wraps
 from time import time
-from typing import List, Tuple
+from typing import Callable, List, Tuple, TypeVar, Generator
 import itertools
 import re
+
+T = TypeVar('T')
 
 
 def timing(f):
@@ -38,6 +40,29 @@ def sliding_window(iterable, n=2):
     return zip(*iterables)
 
 
+def identity(x: T) -> T:
+    return x
+
+
+def grid(s: str, mapper: Callable[[str], T] = identity) -> Tuple[List[List[T]], int, int]:
+    "Converts a multiline string to a grid"
+    grid = [[mapper(x) for x in line.strip()] for line in s.splitlines()]
+    return grid, len(grid[0]), len(grid)
+
+
+def walk_grid(grid: List[List[T]]) -> Generator[Tuple[Tuple[int, int], T], None, None]:
+    "Walk over a grid in reading order"
+    for y, row in enumerate(grid):
+        for x, cell in enumerate(row):
+            yield (x, y), cell
+
+
+def print_grid(grid: List[List[T]], mapper: Callable[[T], str] = str) -> None:
+    "Print a grid"
+    for row in grid:
+        print(''.join(map(mapper, row)))
+
+
 def manhattan(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
     "Return the manhattan distance between 2 (multi-dimensional) points"
     return sum([abs(a-b) for a, b in zip(p, q)])
@@ -48,30 +73,48 @@ def king_distance(p: Tuple[int, ...], q=itertools.repeat(0)) -> Tuple[int, ...]:
     return max(abs(a - b) for a, b in zip(p, q))
 
 
-def neighbors4(p: Tuple[int, int]) -> List[Tuple[int, int]]:
+def neighbors4(p: Tuple[int, int], min_p: Tuple[int, int] = None, max_p: Tuple[int, int] = None) -> List[Tuple[int, int]]:
     "Return the 4 neighboring cells for a given position"
     x, y = p
-    return [
-        (x, y-1),
-        (x, y+1),
-        (x-1, y),
-        (x+1, y)
-    ]
+    min_x, min_y = min_p or (None, None)
+    max_x, max_y = max_p or (None, None)
+
+    n = []
+    if min_x == None or x > min_x:
+        n.append((x-1, y))
+    if min_y == None or y > min_y:
+        n.append((x, y-1))
+    if max_y == None or y < max_y:
+        n.append((x, y+1))
+    if max_x == None or x < max_x:
+        n.append((x+1, y))
+    return n
 
 
-def neighbors8(p: Tuple[int, int]) -> List[Tuple[int, int]]:
-    "Return the 8 neighboring cells for a given position"
+def neighbors8(p: Tuple[int, int], min_p: Tuple[int, int] = None, max_p: Tuple[int, int] = None) -> List[Tuple[int, int]]:
+    "Return the 8 neighboring cells for a given position in reading order from top left to bottom right"
     x, y = p
-    return [
-        (x-1, y-1),
-        (x, y-1),
-        (x+1, y-1),
-        (x-1, y),
-        (x+1, y),
-        (x-1, y+1),
-        (x, y+1),
-        (x+1, y+1)
-    ]
+    min_x, min_y = min_p or (None, None)
+    max_x, max_y = max_p or (None, None)
+
+    n = []
+    if min_y == None or y > min_y:
+        if min_x == None or x > min_x:
+            n.append((x-1, y-1))
+        n.append((x, y-1))
+        if max_x == None or x < max_x:
+            n.append((x+1, y-1))
+    if min_x == None or x > min_x:
+        n.append((x-1, y))
+    if max_x == None or x < max_x:
+        n.append((x+1, y))
+    if max_y == None or y < max_y:
+        if min_x == None or x > min_x:
+            n.append((x-1, y+1))
+        n.append((x, y+1))
+        if max_x == None or x < max_x:
+            n.append((x+1, y+1))
+    return n
 
 
 def neighbors_cube(p: Tuple[int, int, int]) -> List[Tuple[int, int, int]]:

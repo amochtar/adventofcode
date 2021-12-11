@@ -7,31 +7,25 @@ from math import prod
 
 @aoc.timing
 def part1(inp: str):
-    area = [list(map(int, line)) for line in inp.splitlines()]
-    w, h = len(area[0]), len(area)
+    area, w, h = aoc.grid(inp, int)
     risk = 0
-    for y in range(h):
-        for x in range(w):
-            if all(area[b][a] > area[y][x] for (a, b) in aoc.neighbors4(
-                    (x, y)) if a >= 0 and a < w and b >= 0 and b < h):
-                risk += 1+area[y][x]
+    for (x, y), v in aoc.walk_grid(area):
+        if all(area[b][a] > v for (a, b) in aoc.neighbors4((x, y), (0, 0), (w-1, h-1))):
+            risk += v + 1
     return risk
 
 
 @aoc.timing
 def part2(inp: str):
-    area = [list(map(int, line)) for line in inp.splitlines()]
-    w, h = len(area[0]), len(area)
+    area, w, h = aoc.grid(inp, int)
 
     graph = nx.Graph()
-    for y in range(h):
-        for x in range(w):
-            if area[y][x] == 9:
-                continue
-            for (a, b) in aoc.neighbors4((x, y)):
-                if a >= 0 and a < w and b >= 0 and b < h:
-                    if area[b][a] != 9:
-                        graph.add_edge((x, y), (a, b))
+    for (x, y), v in aoc.walk_grid(area):
+        if v == 9:
+            continue
+        for (a, b) in aoc.neighbors4((x, y), (0, 0), (w-1, h-1)):
+            if area[b][a] != 9:
+                graph.add_edge((x, y), (a, b))
 
     basins = map(len, nx.connected_components(graph))
     return prod(sorted(basins, reverse=True)[:3])
