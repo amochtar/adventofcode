@@ -1,4 +1,4 @@
-ipython==7.19.0
+ipython==7.31.1
 networkx==2.5
 numpy==1.19.4
 parse==1.18.0
